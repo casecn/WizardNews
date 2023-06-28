@@ -1,6 +1,7 @@
 const express = require("express");
 const morgan = require("morgan")
 const postBank = require("./postBank")
+const timeAgo = require("node-time-ago")
 
 const app = express();
 const { PORT = 1337 } = process.env;
@@ -46,9 +47,12 @@ app.get("/", (req, res) => {
 app.get('/posts/:id', (req, res, next) => {
   const id = req.params.id;
   const post = postBank.find(id);
-
-  if(!post.id) {
-    // res.status(404).send("Page not found !")
+  const howLongAgo = timeAgo(Date.now() - post.date);
+  const date = new Date(post.date)
+  const postDate =
+    date.toDateString() + " " + date.getDate() + ", " + date.getFullYear();
+    if(!post.id) {
+    
     next();
   }
   else {
@@ -67,7 +71,7 @@ app.get('/posts/:id', (req, res, next) => {
                   <small>(by ${post.name})</small>
                 </p>
                 <small class="news-info">
-                  ${post.upvotes} upvotes | ${post.date}
+                  ${post.upvotes} upvotes | ${howLongAgo} | ${postDate}
                 </small>
               </div>
         </body>
