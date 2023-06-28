@@ -3,7 +3,7 @@ const morgan = require("morgan")
 const postBank = require("./postBank")
 
 const app = express();
-
+const { PORT = 1337 } = process.env;
 app.use(morgan('dev'));
 app.use(express.static('public'));
 
@@ -82,7 +82,7 @@ app.use((req, res, next) => {
 });
 
 
-const PORT = 1337;
+
 
 app.listen(PORT, () => {
   console.log(`App listening in port ${PORT}`);
